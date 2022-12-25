@@ -20,20 +20,14 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationRepositoryCreateRepository = "/repository.v1.Repository/CreateRepository"
-const OperationRepositoryGetScanRepositoryResult = "/repository.v1.Repository/GetScanRepositoryResult"
-const OperationRepositoryScanRepository = "/repository.v1.Repository/ScanRepository"
 
 type RepositoryHTTPServer interface {
 	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
-	GetScanRepositoryResult(context.Context, *GetScanRepositoryResultRequest) (*GetScanRepositoryResultResponse, error)
-	ScanRepository(context.Context, *ScanRepositoryRequest) (*ScanRepositoryResponse, error)
 }
 
 func RegisterRepositoryHTTPServer(s *http.Server, srv RepositoryHTTPServer) {
 	r := s.Route("/")
-	r.POST("/repository", _Repository_CreateRepository0_HTTP_Handler(srv))
-	r.POST("/repository/scan", _Repository_ScanRepository0_HTTP_Handler(srv))
-	r.GET("/repository/scan", _Repository_GetScanRepositoryResult0_HTTP_Handler(srv))
+	r.POST("/v1/repository", _Repository_CreateRepository0_HTTP_Handler(srv))
 }
 
 func _Repository_CreateRepository0_HTTP_Handler(srv RepositoryHTTPServer) func(ctx http.Context) error {
@@ -55,48 +49,8 @@ func _Repository_CreateRepository0_HTTP_Handler(srv RepositoryHTTPServer) func(c
 	}
 }
 
-func _Repository_ScanRepository0_HTTP_Handler(srv RepositoryHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in ScanRepositoryRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationRepositoryScanRepository)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ScanRepository(ctx, req.(*ScanRepositoryRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*ScanRepositoryResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _Repository_GetScanRepositoryResult0_HTTP_Handler(srv RepositoryHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetScanRepositoryResultRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationRepositoryGetScanRepositoryResult)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetScanRepositoryResult(ctx, req.(*GetScanRepositoryResultRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*GetScanRepositoryResultResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
 type RepositoryHTTPClient interface {
 	CreateRepository(ctx context.Context, req *CreateRepositoryRequest, opts ...http.CallOption) (rsp *CreateRepositoryResponse, err error)
-	GetScanRepositoryResult(ctx context.Context, req *GetScanRepositoryResultRequest, opts ...http.CallOption) (rsp *GetScanRepositoryResultResponse, err error)
-	ScanRepository(ctx context.Context, req *ScanRepositoryRequest, opts ...http.CallOption) (rsp *ScanRepositoryResponse, err error)
 }
 
 type RepositoryHTTPClientImpl struct {
@@ -109,35 +63,9 @@ func NewRepositoryHTTPClient(client *http.Client) RepositoryHTTPClient {
 
 func (c *RepositoryHTTPClientImpl) CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...http.CallOption) (*CreateRepositoryResponse, error) {
 	var out CreateRepositoryResponse
-	pattern := "/repository"
+	pattern := "/v1/repository"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationRepositoryCreateRepository))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *RepositoryHTTPClientImpl) GetScanRepositoryResult(ctx context.Context, in *GetScanRepositoryResultRequest, opts ...http.CallOption) (*GetScanRepositoryResultResponse, error) {
-	var out GetScanRepositoryResultResponse
-	pattern := "/repository/scan"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationRepositoryGetScanRepositoryResult))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *RepositoryHTTPClientImpl) ScanRepository(ctx context.Context, in *ScanRepositoryRequest, opts ...http.CallOption) (*ScanRepositoryResponse, error) {
-	var out ScanRepositoryResponse
-	pattern := "/repository/scan"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationRepositoryScanRepository))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

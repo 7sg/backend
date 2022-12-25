@@ -15,26 +15,13 @@ service Repository {
   // Sends a greeting
   rpc CreateRepository (CreateRepositoryRequest) returns (CreateRepositoryResponse) {
     option (google.api.http) = {
-      post: "/repository"
+      post: "/v1/repository"
       body: "*"
       response_body: "*"
-    };
-  }
-
-  rpc ScanRepository (ScanRepositoryRequest) returns (ScanRepositoryResponse) {
-    option (google.api.http) = {
-      post: "/repository/scan"
-      body: "*"
-      response_body: "*"
-    };
-  }
-
-  rpc GetScanRepositoryResult (GetScanRepositoryResultRequest) returns (GetScanRepositoryResultResponse) {
-    option (google.api.http) = {
-      get: "/repository/scan"
     };
   }
 }
+
 
 // The request message containing the user's name.
 message CreateRepositoryRequest {
@@ -46,60 +33,4 @@ message CreateRepositoryRequest {
 message CreateRepositoryResponse {
   string id = 1;
   string message = 2;
-}
-
-message ScanRepositoryRequest {
-  string repository_id = 1;
-}
-
-enum ScanStatus {
-    Queued = 0;
-    InProgress = 1;
-    Success = 2;
-    Failure = 3;
-}
-
-message ScanRepositoryResponse {
-  string result_id = 1;
-  ScanStatus scan_status = 2;
-}
-
-message GetScanRepositoryResultRequest {
-  string result_id = 1;
-}
-
-message GetScanRepositoryResultResponse {
-  string result_id = 1;
-  ScanStatus scan_status = 2;
-  string repository_id = 3;
-  repeated Finding findings = 4;
-  google.protobuf.Timestamp enqueued_time = 5;
-  google.protobuf.Timestamp start_time = 6;
-  google.protobuf.Timestamp finish_time = 7;
-}
-
-message Finding {
-  string type = 1;
-  string rule_id = 2;
-  Location location = 3;
-  Metadata metadata = 4;
-}
-
-message Metadata {
-  string description = 1;
-  string severity = 2;
-}
-
-message Location {
-  string path = 1;
-  Positions positions = 2;
-
-}
-
-message Positions {
-  Begin begin = 1;
-}
-
-message Begin {
-  uint32 line = 1;
 }

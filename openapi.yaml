@@ -25,7 +25,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/helloworld.v1.HelloReply'
-    /repository:
+    /v1/repository:
         post:
             tags:
                 - Repository
@@ -44,14 +44,33 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/repository.v1.CreateRepositoryResponse'
-    /repository/scan:
+    /v1/scan:
+        post:
+            tags:
+                - Scan
+            operationId: Scan_ScanRepository
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/scan.v1.ScanRepositoryRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/scan.v1.ScanRepositoryResponse'
+    /v1/scan/{resultId}:
         get:
             tags:
-                - Repository
-            operationId: Repository_GetScanRepositoryResult
+                - Scan
+            operationId: Scan_GetScanRepositoryResult
             parameters:
                 - name: resultId
-                  in: query
+                  in: path
+                  required: true
                   schema:
                     type: string
             responses:
@@ -60,24 +79,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/repository.v1.GetScanRepositoryResultResponse'
-        post:
-            tags:
-                - Repository
-            operationId: Repository_ScanRepository
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/repository.v1.ScanRepositoryRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/repository.v1.ScanRepositoryResponse'
+                                $ref: '#/components/schemas/scan.v1.GetScanRepositoryResultResponse'
 components:
     schemas:
         helloworld.v1.HelloReply:
@@ -86,12 +88,6 @@ components:
                 message:
                     type: string
             description: The response message containing the greetings
-        repository.v1.Begin:
-            type: object
-            properties:
-                line:
-                    type: integer
-                    format: uint32
         repository.v1.CreateRepositoryRequest:
             type: object
             properties:
@@ -108,7 +104,13 @@ components:
                 message:
                     type: string
             description: The response message containing the greetings
-        repository.v1.Finding:
+        scan.v1.Begin:
+            type: object
+            properties:
+                line:
+                    type: integer
+                    format: uint32
+        scan.v1.Finding:
             type: object
             properties:
                 type:
@@ -116,10 +118,10 @@ components:
                 ruleId:
                     type: string
                 location:
-                    $ref: '#/components/schemas/repository.v1.Location'
+                    $ref: '#/components/schemas/scan.v1.Location'
                 metadata:
-                    $ref: '#/components/schemas/repository.v1.Metadata'
-        repository.v1.GetScanRepositoryResultResponse:
+                    $ref: '#/components/schemas/scan.v1.Metadata'
+        scan.v1.GetScanRepositoryResultResponse:
             type: object
             properties:
                 resultId:
@@ -132,7 +134,7 @@ components:
                 findings:
                     type: array
                     items:
-                        $ref: '#/components/schemas/repository.v1.Finding'
+                        $ref: '#/components/schemas/scan.v1.Finding'
                 enqueuedTime:
                     type: string
                     format: date-time
@@ -142,31 +144,31 @@ components:
                 finishTime:
                     type: string
                     format: date-time
-        repository.v1.Location:
+        scan.v1.Location:
             type: object
             properties:
                 path:
                     type: string
                 positions:
-                    $ref: '#/components/schemas/repository.v1.Positions'
-        repository.v1.Metadata:
+                    $ref: '#/components/schemas/scan.v1.Positions'
+        scan.v1.Metadata:
             type: object
             properties:
                 description:
                     type: string
                 severity:
                     type: string
-        repository.v1.Positions:
+        scan.v1.Positions:
             type: object
             properties:
                 begin:
-                    $ref: '#/components/schemas/repository.v1.Begin'
-        repository.v1.ScanRepositoryRequest:
+                    $ref: '#/components/schemas/scan.v1.Begin'
+        scan.v1.ScanRepositoryRequest:
             type: object
             properties:
                 repositoryId:
                     type: string
-        repository.v1.ScanRepositoryResponse:
+        scan.v1.ScanRepositoryResponse:
             type: object
             properties:
                 resultId:
@@ -179,3 +181,4 @@ tags:
       description: The greeting service definition.
     - name: Repository
       description: The greeting service definition.
+    - name: Scan

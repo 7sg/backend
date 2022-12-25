@@ -24,8 +24,6 @@ const _ = grpc.SupportPackageIsVersion7
 type RepositoryClient interface {
 	// Sends a greeting
 	CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error)
-	ScanRepository(ctx context.Context, in *ScanRepositoryRequest, opts ...grpc.CallOption) (*ScanRepositoryResponse, error)
-	GetScanRepositoryResult(ctx context.Context, in *GetScanRepositoryResultRequest, opts ...grpc.CallOption) (*GetScanRepositoryResultResponse, error)
 }
 
 type repositoryClient struct {
@@ -45,32 +43,12 @@ func (c *repositoryClient) CreateRepository(ctx context.Context, in *CreateRepos
 	return out, nil
 }
 
-func (c *repositoryClient) ScanRepository(ctx context.Context, in *ScanRepositoryRequest, opts ...grpc.CallOption) (*ScanRepositoryResponse, error) {
-	out := new(ScanRepositoryResponse)
-	err := c.cc.Invoke(ctx, "/repository.v1.Repository/ScanRepository", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *repositoryClient) GetScanRepositoryResult(ctx context.Context, in *GetScanRepositoryResultRequest, opts ...grpc.CallOption) (*GetScanRepositoryResultResponse, error) {
-	out := new(GetScanRepositoryResultResponse)
-	err := c.cc.Invoke(ctx, "/repository.v1.Repository/GetScanRepositoryResult", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // RepositoryServer is the server API for Repository service.
 // All implementations must embed UnimplementedRepositoryServer
 // for forward compatibility
 type RepositoryServer interface {
 	// Sends a greeting
 	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
-	ScanRepository(context.Context, *ScanRepositoryRequest) (*ScanRepositoryResponse, error)
-	GetScanRepositoryResult(context.Context, *GetScanRepositoryResultRequest) (*GetScanRepositoryResultResponse, error)
 	mustEmbedUnimplementedRepositoryServer()
 }
 
@@ -80,12 +58,6 @@ type UnimplementedRepositoryServer struct {
 
 func (UnimplementedRepositoryServer) CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRepository not implemented")
-}
-func (UnimplementedRepositoryServer) ScanRepository(context.Context, *ScanRepositoryRequest) (*ScanRepositoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ScanRepository not implemented")
-}
-func (UnimplementedRepositoryServer) GetScanRepositoryResult(context.Context, *GetScanRepositoryResultRequest) (*GetScanRepositoryResultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetScanRepositoryResult not implemented")
 }
 func (UnimplementedRepositoryServer) mustEmbedUnimplementedRepositoryServer() {}
 
@@ -118,42 +90,6 @@ func _Repository_CreateRepository_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Repository_ScanRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ScanRepositoryRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RepositoryServer).ScanRepository(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/repository.v1.Repository/ScanRepository",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RepositoryServer).ScanRepository(ctx, req.(*ScanRepositoryRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Repository_GetScanRepositoryResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetScanRepositoryResultRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RepositoryServer).GetScanRepositoryResult(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/repository.v1.Repository/GetScanRepositoryResult",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RepositoryServer).GetScanRepositoryResult(ctx, req.(*GetScanRepositoryResultRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Repository_ServiceDesc is the grpc.ServiceDesc for Repository service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -164,14 +100,6 @@ var Repository_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateRepository",
 			Handler:    _Repository_CreateRepository_Handler,
-		},
-		{
-			MethodName: "ScanRepository",
-			Handler:    _Repository_ScanRepository_Handler,
-		},
-		{
-			MethodName: "GetScanRepositoryResult",
-			Handler:    _Repository_GetScanRepositoryResult_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

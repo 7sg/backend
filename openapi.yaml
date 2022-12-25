@@ -3,15 +3,13 @@
 
 openapi: 3.0.3
 info:
-    title: Greeter API
-    description: The greeting service definition.
+    title: ""
     version: 0.0.1
 paths:
     /helloworld/{name}:
         get:
             tags:
                 - Greeter
-                - subgroup
             description: Sends a greeting
             operationId: Greeter_SayHello
             parameters:
@@ -27,6 +25,59 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/helloworld.v1.HelloReply'
+    /repository:
+        post:
+            tags:
+                - Repository
+            description: Sends a greeting
+            operationId: Repository_CreateRepository
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/repository.v1.CreateRepositoryRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/repository.v1.CreateRepositoryResponse'
+    /repository/scan:
+        get:
+            tags:
+                - Repository
+            operationId: Repository_GetScanRepositoryResult
+            parameters:
+                - name: resultId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/repository.v1.GetScanRepositoryResultResponse'
+        post:
+            tags:
+                - Repository
+            operationId: Repository_ScanRepository
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/repository.v1.ScanRepositoryRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/repository.v1.ScanRepositoryResponse'
 components:
     schemas:
         helloworld.v1.HelloReply:
@@ -35,5 +86,96 @@ components:
                 message:
                     type: string
             description: The response message containing the greetings
+        repository.v1.Begin:
+            type: object
+            properties:
+                line:
+                    type: integer
+                    format: uint32
+        repository.v1.CreateRepositoryRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                link:
+                    type: string
+            description: The request message containing the user's name.
+        repository.v1.CreateRepositoryResponse:
+            type: object
+            properties:
+                id:
+                    type: string
+                message:
+                    type: string
+            description: The response message containing the greetings
+        repository.v1.Finding:
+            type: object
+            properties:
+                type:
+                    type: string
+                ruleId:
+                    type: string
+                location:
+                    $ref: '#/components/schemas/repository.v1.Location'
+                metadata:
+                    $ref: '#/components/schemas/repository.v1.Metadata'
+        repository.v1.GetScanRepositoryResultResponse:
+            type: object
+            properties:
+                resultId:
+                    type: string
+                scanStatus:
+                    type: integer
+                    format: enum
+                repositoryId:
+                    type: string
+                findings:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/repository.v1.Finding'
+                enqueuedTime:
+                    type: string
+                    format: date-time
+                startTime:
+                    type: string
+                    format: date-time
+                finishTime:
+                    type: string
+                    format: date-time
+        repository.v1.Location:
+            type: object
+            properties:
+                path:
+                    type: string
+                positions:
+                    $ref: '#/components/schemas/repository.v1.Positions'
+        repository.v1.Metadata:
+            type: object
+            properties:
+                description:
+                    type: string
+                severity:
+                    type: string
+        repository.v1.Positions:
+            type: object
+            properties:
+                begin:
+                    $ref: '#/components/schemas/repository.v1.Begin'
+        repository.v1.ScanRepositoryRequest:
+            type: object
+            properties:
+                repositoryId:
+                    type: string
+        repository.v1.ScanRepositoryResponse:
+            type: object
+            properties:
+                resultId:
+                    type: string
+                scanStatus:
+                    type: integer
+                    format: enum
 tags:
     - name: Greeter
+      description: The greeting service definition.
+    - name: Repository
+      description: The greeting service definition.

@@ -24,7 +24,11 @@ import (
 
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data.NewData(confData, logger)
+	db, err := data.NewPostgresClient(confData, logger)
+	if err != nil {
+		return nil, nil, err
+	}
+	dataData, err := data.NewData(db)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -41,6 +45,5 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	httpServer := server.NewHTTPServer(confServer, greeterService, repositoryService, scanService, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
-		cleanup()
 	}, nil
 }

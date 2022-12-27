@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=post
+      - POSTGRES_PASSWORD=post
+      - POSTGRES_DB=security_scan
+    ports:
+      - '5434:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d/
+  app:
+    build: .
+    restart: always
+    ports:
+      - '8000:8000'
+      - '9000:9000'
+    depends_on:
+      - db
+    volumes:
+      - ./configs:/data/conf
+volumes:
+  db:
+    driver: local

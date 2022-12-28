@@ -29,7 +29,7 @@ service Scan {
 
 
 message ScanRepositoryRequest {
-  string repository_id = 1;
+  uint64 repository_id = 1;
 }
 
 enum ScanStatus {
@@ -40,18 +40,19 @@ enum ScanStatus {
 }
 
 message ScanRepositoryResponse {
-  string result_id = 1;
+  uint64 result_id = 1;
   ScanStatus scan_status = 2;
+  google.protobuf.Timestamp enqueued_time = 3;
 }
 
 message GetScanRepositoryResultRequest {
-  string result_id = 1;
+  uint64 result_id = 1;
 }
 
 message GetScanRepositoryResultResponse {
-  string result_id = 1;
+  uint64 result_id = 1;
   ScanStatus scan_status = 2;
-  string repository_id = 3;
+  uint64 repository_id = 3;
   repeated Finding findings = 4;
   google.protobuf.Timestamp enqueued_time = 5;
   google.protobuf.Timestamp start_time = 6;

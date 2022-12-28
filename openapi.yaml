@@ -72,7 +72,8 @@ paths:
                   in: path
                   required: true
                   schema:
-                    type: string
+                    type: integer
+                    format: uint64
             responses:
                 "200":
                     description: OK
@@ -100,7 +101,8 @@ components:
             type: object
             properties:
                 id:
-                    type: string
+                    type: integer
+                    format: uint64
                 message:
                     type: string
             description: The response message containing the greetings
@@ -125,12 +127,14 @@ components:
             type: object
             properties:
                 resultId:
-                    type: string
+                    type: integer
+                    format: uint64
                 scanStatus:
                     type: integer
                     format: enum
                 repositoryId:
-                    type: string
+                    type: integer
+                    format: uint64
                 findings:
                     type: array
                     items:
@@ -167,15 +171,20 @@ components:
             type: object
             properties:
                 repositoryId:
-                    type: string
+                    type: integer
+                    format: uint64
         scan.v1.ScanRepositoryResponse:
             type: object
             properties:
                 resultId:
-                    type: string
+                    type: integer
+                    format: uint64
                 scanStatus:
                     type: integer
                     format: enum
+                enqueuedTime:
+                    type: string
+                    format: date-time
 tags:
     - name: Greeter
       description: The greeting service definition.

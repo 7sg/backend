@@ -6,7 +6,7 @@ import (
 )
 
 type Repository struct {
-	Id   string
+	Id   uint64
 	Name string
 	Link string
 }

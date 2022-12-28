@@ -3,7 +3,6 @@ syntax = "proto3";
 package repository.v1;
 
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
 
 option go_package = "backend-GuardRails/api/repository/v1;v1";
 option java_multiple_files = true;
@@ -31,6 +30,6 @@ message CreateRepositoryRequest {
 
 // The response message containing the greetings
 message CreateRepositoryResponse {
-  string id = 1;
+  uint64 id = 1;
   string message = 2;
 }

@@ -1,10 +1,10 @@
 server:
   http:
     addr: 0.0.0.0:8000
-    timeout: 1s
+    timeout: 5s
   grpc:
     addr: 0.0.0.0:9000
-    timeout: 1s
+    timeout: 5s
 data:
   database:
     user: "post"
@@ -16,3 +16,9 @@ data:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
+  kafka:
+    brokers: "broker:9092"
+    git_clone_topic: "git_clone"
+    file_content_topic: "file_content"
+    git_clone_consumer_group_id: "git_clone_consumer_group_id_c6c28270-6ef1-4c6e-9f05-41e44d057aad"
+    file_content_consumer_group_id: "file_content_consumer_group_id_75d91315-5fea-49c9-9c71-9ffdba49030f"

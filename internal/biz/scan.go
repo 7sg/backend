@@ -2,7 +2,6 @@ package biz
 
 import (
 	"context"
-	"database/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"time"
 )
@@ -14,24 +13,31 @@ type Scan struct {
 	EnqueuedTime time.Time
 }
 
-type ScanRepo interface {
-	CreateScan(ctx context.Context, repoId uint64) (*Scan, *sql.Tx, error)
+type GitCloneEvent struct {
+	RepositoryId uint64
 }
 
 type ScanUsecase struct {
-	repo ScanRepo
-	log  *log.Helper
+	repo      ScanRepo
+	KafkaRepo GitCloneKafkaRepo
+	log       *log.Helper
 }
 
 // NewScanUsecase new a Scan usecase.
-func NewScanUsecase(repo ScanRepo, logger log.Logger) *ScanUsecase {
-	return &ScanUsecase{repo: repo, log: log.NewHelper(logger)}
+func NewScanUsecase(repo ScanRepo, kafkaRepo GitCloneKafkaRepo, logger log.Logger) *ScanUsecase {
+	return &ScanUsecase{repo: repo, KafkaRepo: kafkaRepo, log: log.NewHelper(logger)}
 }
 
 func (s *ScanUsecase) ScanRepository(ctx context.Context, repoId uint64) (*Scan, error) {
 	scan, tx, err := s.repo.CreateScan(ctx, repoId)
 	if err != nil {
 		s.log.Errorf("error while creating scan: %v", err)
+		return nil, err
+	}
+	err = s.KafkaRepo.PublishGitClone(ctx, &GitCloneEvent{RepositoryId: repoId})
+	if err != nil {
+		tx.Rollback()
+		s.log.Errorf("error while publishing git clone: %v", err)
 		return nil, err
 	}
 	err = tx.Commit()

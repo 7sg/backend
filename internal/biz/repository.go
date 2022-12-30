@@ -11,10 +11,6 @@ type Repository struct {
 	Link string
 }
 
-type RepositoryRepo interface {
-	CreateRepository(ctx context.Context, repo *Repository) (*Repository, error)
-}
-
 type RepositoryUsecase struct {
 	repo RepositoryRepo
 	log  *log.Helper

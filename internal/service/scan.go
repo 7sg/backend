@@ -11,11 +11,12 @@ type ScanService struct {
 	v1.UnimplementedScanServer
 
 	uc *biz.ScanUsecase
+	gc *biz.GitCloneUseCase
 }
 
 // NewScanService new a scan service.
-func NewScanService(uc *biz.ScanUsecase) *ScanService {
-	return &ScanService{uc: uc}
+func NewScanService(uc *biz.ScanUsecase, gc *biz.GitCloneUseCase) *ScanService {
+	return &ScanService{uc: uc, gc: gc}
 }
 
 func (s *ScanService) ScanRepository(ctx context.Context, scanRequest *v1.ScanRepositoryRequest) (*v1.ScanRepositoryResponse, error) {

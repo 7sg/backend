@@ -20,14 +20,17 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationRepositoryCreateRepository = "/repository.v1.Repository/CreateRepository"
+const OperationRepositoryGetRepository = "/repository.v1.Repository/GetRepository"
 
 type RepositoryHTTPServer interface {
 	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
+	GetRepository(context.Context, *GetRepositoryRequest) (*GetRepositoryResponse, error)
 }
 
 func RegisterRepositoryHTTPServer(s *http.Server, srv RepositoryHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/repository", _Repository_CreateRepository0_HTTP_Handler(srv))
+	r.GET("/v1/repository/{id}", _Repository_GetRepository0_HTTP_Handler(srv))
 }
 
 func _Repository_CreateRepository0_HTTP_Handler(srv RepositoryHTTPServer) func(ctx http.Context) error {
@@ -49,8 +52,31 @@ func _Repository_CreateRepository0_HTTP_Handler(srv RepositoryHTTPServer) func(c
 	}
 }
 
+func _Repository_GetRepository0_HTTP_Handler(srv RepositoryHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetRepositoryRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationRepositoryGetRepository)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetRepository(ctx, req.(*GetRepositoryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetRepositoryResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type RepositoryHTTPClient interface {
 	CreateRepository(ctx context.Context, req *CreateRepositoryRequest, opts ...http.CallOption) (rsp *CreateRepositoryResponse, err error)
+	GetRepository(ctx context.Context, req *GetRepositoryRequest, opts ...http.CallOption) (rsp *GetRepositoryResponse, err error)
 }
 
 type RepositoryHTTPClientImpl struct {
@@ -68,6 +94,19 @@ func (c *RepositoryHTTPClientImpl) CreateRepository(ctx context.Context, in *Cre
 	opts = append(opts, http.Operation(OperationRepositoryCreateRepository))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *RepositoryHTTPClientImpl) GetRepository(ctx context.Context, in *GetRepositoryRequest, opts ...http.CallOption) (*GetRepositoryResponse, error) {
+	var out GetRepositoryResponse
+	pattern := "/v1/repository/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationRepositoryGetRepository))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

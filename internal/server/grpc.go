@@ -1,7 +1,6 @@
 package server
 
 import (
-	v1 "backend-GuardRails/api/helloworld/v1"
 	repositoryV1 "backend-GuardRails/api/repository/v1"
 	scanV1 "backend-GuardRails/api/scan/v1"
 	"backend-GuardRails/internal/conf"
@@ -13,7 +12,12 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, repository *service.RepositoryService, scan *service.ScanService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(
+	c *conf.Server,
+	repository *service.RepositoryService,
+	scan *service.ScanService,
+	logger log.Logger,
+) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -29,8 +33,8 @@ func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, repository *
 		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
 	srv := grpc.NewServer(opts...)
-	v1.RegisterGreeterServer(srv, greeter)
 	repositoryV1.RegisterRepositoryServer(srv, repository)
 	scanV1.RegisterScanServer(srv, scan)
+
 	return srv
 }

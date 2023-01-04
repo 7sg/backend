@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type RepositoryClient interface {
 	// Sends a greeting
 	CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error)
+	GetRepository(ctx context.Context, in *GetRepositoryRequest, opts ...grpc.CallOption) (*GetRepositoryResponse, error)
 }
 
 type repositoryClient struct {
@@ -43,12 +44,22 @@ func (c *repositoryClient) CreateRepository(ctx context.Context, in *CreateRepos
 	return out, nil
 }
 
+func (c *repositoryClient) GetRepository(ctx context.Context, in *GetRepositoryRequest, opts ...grpc.CallOption) (*GetRepositoryResponse, error) {
+	out := new(GetRepositoryResponse)
+	err := c.cc.Invoke(ctx, "/repository.v1.Repository/GetRepository", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RepositoryServer is the server API for Repository service.
 // All implementations must embed UnimplementedRepositoryServer
 // for forward compatibility
 type RepositoryServer interface {
 	// Sends a greeting
 	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
+	GetRepository(context.Context, *GetRepositoryRequest) (*GetRepositoryResponse, error)
 	mustEmbedUnimplementedRepositoryServer()
 }
 
@@ -58,6 +69,9 @@ type UnimplementedRepositoryServer struct {
 
 func (UnimplementedRepositoryServer) CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRepository not implemented")
+}
+func (UnimplementedRepositoryServer) GetRepository(context.Context, *GetRepositoryRequest) (*GetRepositoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRepository not implemented")
 }
 func (UnimplementedRepositoryServer) mustEmbedUnimplementedRepositoryServer() {}
 
@@ -90,6 +104,24 @@ func _Repository_CreateRepository_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Repository_GetRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRepositoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RepositoryServer).GetRepository(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/repository.v1.Repository/GetRepository",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RepositoryServer).GetRepository(ctx, req.(*GetRepositoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Repository_ServiceDesc is the grpc.ServiceDesc for Repository service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -100,6 +132,10 @@ var Repository_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateRepository",
 			Handler:    _Repository_CreateRepository_Handler,
+		},
+		{
+			MethodName: "GetRepository",
+			Handler:    _Repository_GetRepository_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

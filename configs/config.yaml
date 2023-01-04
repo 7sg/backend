@@ -9,15 +9,15 @@ data:
   database:
     user: "post"
     password: "post"
-    host: "db"
-    port: 5432
+    host: "localhost"
+    port: 5434
     db_name: "security_scan"
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
   kafka:
-    brokers: "broker:9092"
+    brokers: "localhost:29092"
     git_clone_topic: "git_clone"
     file_content_topic: "file_content"
     git_clone_consumer_group_id: "git_clone_consumer_group_id_c6c28270-6ef1-4c6e-9f05-41e44d057aad"

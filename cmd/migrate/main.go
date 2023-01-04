@@ -1,15 +1,16 @@
 package main
 
 import (
+	"flag"
+	"os"
+
 	"backend-GuardRails/internal/conf"
 	"backend-GuardRails/internal/data"
-	"flag"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/pressly/goose/v3"
-	"os"
 )
 
 var (
@@ -55,7 +56,7 @@ func main() {
 
 	db, err := data.NewPostgresClient(bc.Data, logger)
 	if err != nil {
-		log.Fatalf("Unable to connect to database: %v\n", err)
+		log.Errorf("Unable to connect to database: %v\n", err)
 	}
 	defer db.Close()
 

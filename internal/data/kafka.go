@@ -12,6 +12,7 @@ func newKafkaGitCloneConsumer(c *conf.Data) *kafka.Reader {
 		Topic:       c.Kafka.GitCloneTopic,
 		StartOffset: kafka.FirstOffset,
 	})
+
 	return r
 }
 
@@ -22,6 +23,7 @@ func newKafkaFileContentConsumer(c *conf.Data) *kafka.Reader {
 		Topic:       c.Kafka.FileContentTopic,
 		StartOffset: kafka.FirstOffset,
 	})
+
 	return r
 }
 
@@ -31,6 +33,7 @@ func newKafkaGitCloneProducer(c *conf.Data) *kafka.Writer {
 		Topic:                  c.Kafka.GitCloneTopic,
 		AllowAutoTopicCreation: true,
 	}
+
 	return w
 }
 
@@ -38,7 +41,9 @@ func newKafkaFileContentProducer(c *conf.Data) *kafka.Writer {
 	w := &kafka.Writer{
 		Addr:                   kafka.TCP(c.Kafka.Brokers),
 		Topic:                  c.Kafka.FileContentTopic,
+		BatchBytes:             1099511627776,
 		AllowAutoTopicCreation: true,
 	}
+
 	return w
 }

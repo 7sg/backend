@@ -6,25 +6,6 @@ info:
     title: ""
     version: 0.0.1
 paths:
-    /helloworld/{name}:
-        get:
-            tags:
-                - Greeter
-            description: Sends a greeting
-            operationId: Greeter_SayHello
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
     /v1/repository:
         post:
             tags:
@@ -44,6 +25,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/repository.v1.CreateRepositoryResponse'
+    /v1/repository/{id}:
+        get:
+            tags:
+                - Repository
+            operationId: Repository_GetRepository
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/repository.v1.GetRepositoryResponse'
     /v1/scan:
         post:
             tags:
@@ -83,12 +83,6 @@ paths:
                                 $ref: '#/components/schemas/scan.v1.GetScanRepositoryResultResponse'
 components:
     schemas:
-        helloworld.v1.HelloReply:
-            type: object
-            properties:
-                message:
-                    type: string
-            description: The response message containing the greetings
         repository.v1.CreateRepositoryRequest:
             type: object
             properties:
@@ -106,6 +100,16 @@ components:
                 message:
                     type: string
             description: The response message containing the greetings
+        repository.v1.GetRepositoryResponse:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint64
+                name:
+                    type: string
+                link:
+                    type: string
         scan.v1.Begin:
             type: object
             properties:
@@ -186,8 +190,6 @@ components:
                     type: string
                     format: date-time
 tags:
-    - name: Greeter
-      description: The greeting service definition.
     - name: Repository
       description: The greeting service definition.
     - name: Scan

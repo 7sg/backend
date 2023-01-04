@@ -1,0 +1,100 @@
+  run:
+    # default concurrency is a available CPU number
+    concurrency: 4
+
+    # timeout for analysis, e.g. 30s, 5m, default is 1m
+    timeout: 5m
+
+    # exit code when at least one issue was found, default is 1
+    issues-exit-code: 1
+
+    # include test files or not, default is true
+    tests: false
+
+    # skip download modules
+    modules-download-mode: readonly
+
+  # output configuration options
+  output:
+    # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
+    format: colored-line-number
+
+    # print lines of code with issue, default is true
+    print-issued-lines: true
+
+    # print linter name in the end of issue text, default is true
+    print-linter-name: true
+
+  linters-settings:
+    funlen:
+      lines: 90
+    golint:
+      min-confidence: 0.9
+    lll:
+      line-length: 140
+    tagliatelle:
+      # Check the struck tag name case.
+      case:
+        # Use the struct field name to check the name of the struct tag.
+        # Default: false
+        use-field-name: true
+        # `camel` is used for `json` and `yaml` (can be overridden)
+        # Default: {}
+        rules:
+          # Any struct tag type can be used.
+          # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`
+          json: snake
+          yaml: camel
+          xml: camel
+          bson: camel
+          avro: snake
+          mapstructure: snake
+
+  linters:
+    enable:
+      - errcheck
+      - gosimple
+      - govet
+      - ineffassign
+      - staticcheck
+      - unused
+      - asciicheck
+      - bidichk
+      - bodyclose
+      - containedctx
+      - decorder
+      - depguard
+      - errchkjson
+      - exhaustive
+      - exportloopref
+      - lll
+      - forcetypeassert
+      - funlen
+      - gci
+      - gocognit
+      - goconst
+      - gocritic
+      - gocyclo
+      - gofmt
+      - gosec
+      - nakedret
+      - nestif
+      - nilerr
+      - nlreturn
+      - prealloc
+      - predeclared
+      - revive
+      - sqlclosecheck
+      - stylecheck
+      - tagliatelle
+      - typecheck
+      - unconvert
+      - misspell
+      - dogsled
+      - whitespace
+  skip-dirs:
+    - third_party
+    - mocks
+  skip-files:
+    - ".*\\.pb\\.go$"
+    - "wire_gen.go"

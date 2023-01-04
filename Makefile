@@ -63,6 +63,18 @@ all:
 	make config;
 	make generate;
 
+.PHONY: lint
+# lint
+lint:
+	golangci-lint run -v --timeout 10m
+
+.PHONE: format
+# format
+format:
+	golines ./ -w
+	gci write --skip-generated ./
+	gofmt -w ./
+
 # show help
 help:
 	@echo ''
@@ -81,3 +93,8 @@ help:
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
 .DEFAULT_GOAL := help
+
+.PHONY: mocks
+# mocks
+mocks:
+	mockery --all --dir=internal/biz --output=mocks --keeptree=false

@@ -1,7 +1,6 @@
 package server
 
 import (
-	v1 "backend-GuardRails/api/helloworld/v1"
 	repositoryV1 "backend-GuardRails/api/repository/v1"
 	scanV1 "backend-GuardRails/api/scan/v1"
 	"backend-GuardRails/internal/conf"
@@ -13,7 +12,12 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, repository *service.RepositoryService, scan *service.ScanService, logger log.Logger) *http.Server {
+func NewHTTPServer(
+	c *conf.Server,
+	repository *service.RepositoryService,
+	scan *service.ScanService,
+	logger log.Logger,
+) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -29,8 +33,8 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, repository *
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterGreeterHTTPServer(srv, greeter)
 	repositoryV1.RegisterRepositoryHTTPServer(srv, repository)
 	scanV1.RegisterScanHTTPServer(srv, scan)
+
 	return srv
 }

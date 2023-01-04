@@ -19,8 +19,24 @@ service Repository {
       response_body: "*"
     };
   }
+  rpc GetRepository (GetRepositoryRequest) returns (GetRepositoryResponse) {
+    option (google.api.http) = {
+      get: "/v1/repository/{id}"
+      response_body: "*"
+    };
+  }
 }
 
+
+message GetRepositoryRequest {
+  uint64 id = 1;
+}
+
+message GetRepositoryResponse {
+  uint64 id = 1;
+  string name = 2;
+  string link = 3;
+}
 
 // The request message containing the user's name.
 message CreateRepositoryRequest {

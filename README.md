@@ -3,7 +3,7 @@
 ![img.png](img.jpg)
 
 ## Solution
-I wanted the final solution to be fault tolrent and scalable, and decided to do all the processing asynchronously 
+I wanted the final solution to be fault-tolerant and scalable, and decided to do all the processing asynchronously 
 and in retryable manner.
 We have an application which exposes all the needed apis [openapi.yaml](openapi.yaml).
 Once the user creates a repository and create a scan against it, the application will create a scan request and publish it to kafka.
@@ -24,3 +24,7 @@ Run `go test ./...` in root directory
 ## Migration
 I have created a db migration utility, which will run the migrations under [migrations](migrations).
 For that i am using https://github.com/pressly/goose
+
+## Framework
+I am using Kraots, which is Go framework for building microservices.
+https://go-kratos.dev/en/

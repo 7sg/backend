@@ -21,4 +21,4 @@ EXPOSE 8000
 EXPOSE 9000
 VOLUME /data/conf
 
-CMD ["./backend-GuardRails", "-conf", "/data/conf"]
+CMD ["./backend", "-conf", "/data/conf"]

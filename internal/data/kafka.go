@@ -1,7 +1,7 @@
 package data
 
 import (
-	"backend-GuardRails/internal/conf"
+	"backend/internal/conf"
 	"github.com/segmentio/kafka-go"
 )
 

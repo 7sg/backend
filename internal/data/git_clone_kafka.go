@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"backend-GuardRails/internal/biz"
-	"backend-GuardRails/internal/conf"
+	"backend/internal/biz"
+	"backend/internal/conf"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/segmentio/kafka-go"
 )

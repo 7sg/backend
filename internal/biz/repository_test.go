@@ -1,14 +1,13 @@
 package biz_test
 
 import (
-	"backend-GuardRails/internal/biz"
-	"backend-GuardRails/mocks"
 	"fmt"
 	"os"
 	"testing"
 
+	"backend/internal/biz"
+	"backend/mocks"
 	"github.com/go-kratos/kratos/v2/log"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -22,7 +21,8 @@ func TestCreateRepository_Success(t *testing.T) {
 		Link: "github.com/my/repo",
 	}
 	mocks.On("CreateRepository", mock.Anything, mock.Anything).Return(expected, nil)
-	actual, err := biz.NewRepositoryUsecase(&mocks, log.NewStdLogger(os.Stdout)).CreateRepository(nil, nil)
+	actual, err := biz.NewRepositoryUsecase(&mocks, log.NewStdLogger(os.Stdout)).
+		CreateRepository(nil, nil)
 	if err != nil {
 		t.Errorf("expected err %v, actual err %v", nil, err)
 	}
@@ -34,7 +34,8 @@ func TestCreateRepository_Failure(t *testing.T) {
 	mocks := mocks.RepositoryRepo{}
 	expectedErr := fmt.Errorf("error while CreateRepository")
 	mocks.On("CreateRepository", mock.Anything, mock.Anything).Return(nil, expectedErr)
-	actual, err := biz.NewRepositoryUsecase(&mocks, log.NewStdLogger(os.Stdout)).CreateRepository(nil, nil)
+	actual, err := biz.NewRepositoryUsecase(&mocks, log.NewStdLogger(os.Stdout)).
+		CreateRepository(nil, nil)
 	assert.EqualError(t, err, expectedErr.Error())
 	assert.Nil(t, actual)
 	mocks.AssertExpectations(t)
@@ -49,7 +50,8 @@ func TestGetRepository_Success(t *testing.T) {
 		Link: "github.com/my/repo",
 	}
 	mocks.On("GetRepository", mock.Anything, ID).Return(expected, nil)
-	actual, err := biz.NewRepositoryUsecase(&mocks, log.NewStdLogger(os.Stdout)).GetRepository(nil, ID)
+	actual, err := biz.NewRepositoryUsecase(&mocks, log.NewStdLogger(os.Stdout)).
+		GetRepository(nil, ID)
 	if err != nil {
 		t.Errorf("expected err %v, actual err %v", nil, err)
 	}
@@ -61,7 +63,8 @@ func TestGetRepository_Failure(t *testing.T) {
 	mocks := mocks.RepositoryRepo{}
 	expectedErr := fmt.Errorf("error while GetRepository")
 	mocks.On("GetRepository", mock.Anything, mock.Anything).Return(nil, expectedErr)
-	actual, err := biz.NewRepositoryUsecase(&mocks, log.NewStdLogger(os.Stdout)).GetRepository(nil, 1)
+	actual, err := biz.NewRepositoryUsecase(&mocks, log.NewStdLogger(os.Stdout)).
+		GetRepository(nil, 1)
 	assert.EqualError(t, err, expectedErr.Error())
 	assert.Nil(t, actual)
 	mocks.AssertExpectations(t)

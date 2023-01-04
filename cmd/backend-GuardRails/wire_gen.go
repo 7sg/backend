@@ -7,11 +7,11 @@
 package main
 
 import (
-	"backend-GuardRails/internal/biz"
-	"backend-GuardRails/internal/conf"
-	"backend-GuardRails/internal/data"
-	"backend-GuardRails/internal/server"
-	"backend-GuardRails/internal/service"
+	"backend/internal/biz"
+	"backend/internal/conf"
+	"backend/internal/data"
+	"backend/internal/server"
+	"backend/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 )

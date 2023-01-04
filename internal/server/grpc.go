@@ -1,11 +1,10 @@
 package server
 
 import (
-	repositoryV1 "backend-GuardRails/api/repository/v1"
-	scanV1 "backend-GuardRails/api/scan/v1"
-	"backend-GuardRails/internal/conf"
-	"backend-GuardRails/internal/service"
-
+	repositoryV1 "backend/api/repository/v1"
+	scanV1 "backend/api/scan/v1"
+	"backend/internal/conf"
+	"backend/internal/service"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/grpc"

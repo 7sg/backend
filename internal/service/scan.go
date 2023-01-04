@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	v1 "backend-GuardRails/api/scan/v1"
-	"backend-GuardRails/internal/biz"
+	v1 "backend/api/scan/v1"
+	"backend/internal/biz"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

@@ -1,18 +1,17 @@
 package biz_test
 
 import (
-	"backend-GuardRails/internal/biz"
-	"backend-GuardRails/mocks"
 	"fmt"
 	"os"
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/mock"
-
+	"backend/internal/biz"
+	"backend/mocks"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestScanRepository_Success(t *testing.T) {
@@ -33,7 +32,8 @@ func TestScanRepository_Success(t *testing.T) {
 		ScanID:       expected.ID,
 		RepositoryID: repositoryID,
 	}).Return(nil)
-	actual, err := biz.NewScanUsecase(&scanMocks, &gitCloneKafkaMocks, log.NewStdLogger(os.Stdout)).ScanRepository(nil, repositoryID)
+	actual, err := biz.NewScanUsecase(&scanMocks, &gitCloneKafkaMocks, log.NewStdLogger(os.Stdout)).
+		ScanRepository(nil, repositoryID)
 	if err != nil {
 		t.Errorf("expected err %v, actual err %v", nil, err)
 	}
@@ -49,7 +49,8 @@ func TestScanRepository_Fail(t *testing.T) {
 	createScanErr := fmt.Errorf("error while creating scan")
 	scanMocks.On("CreateScan", mock.Anything, repositoryID).Return(nil, nil, createScanErr)
 
-	_, err := biz.NewScanUsecase(&scanMocks, &gitCloneKafkaMocks, log.NewStdLogger(os.Stdout)).ScanRepository(nil, repositoryID)
+	_, err := biz.NewScanUsecase(&scanMocks, &gitCloneKafkaMocks, log.NewStdLogger(os.Stdout)).
+		ScanRepository(nil, repositoryID)
 	assert.ErrorIs(t, err, createScanErr)
 	scanMocks.AssertExpectations(t)
 }
@@ -72,7 +73,8 @@ func TestScanRepository_PublishKafkaFail(t *testing.T) {
 		ScanID:       expected.ID,
 		RepositoryID: repositoryID,
 	}).Return(publishKafkaErr)
-	_, err := biz.NewScanUsecase(&scanMocks, &gitCloneKafkaMocks, log.NewStdLogger(os.Stdout)).ScanRepository(nil, repositoryID)
+	_, err := biz.NewScanUsecase(&scanMocks, &gitCloneKafkaMocks, log.NewStdLogger(os.Stdout)).
+		ScanRepository(nil, repositoryID)
 	assert.ErrorIs(t, err, publishKafkaErr)
 	scanMocks.AssertExpectations(t)
 	smock.ExpectationsWereMet()
@@ -96,7 +98,8 @@ func TestScanRepository_TransactionCommitFail(t *testing.T) {
 		ScanID:       expected.ID,
 		RepositoryID: repositoryID,
 	}).Return(nil)
-	_, err := biz.NewScanUsecase(&scanMocks, &gitCloneKafkaMocks, log.NewStdLogger(os.Stdout)).ScanRepository(nil, repositoryID)
+	_, err := biz.NewScanUsecase(&scanMocks, &gitCloneKafkaMocks, log.NewStdLogger(os.Stdout)).
+		ScanRepository(nil, repositoryID)
 	assert.ErrorIs(t, err, txnCommitErr)
 	scanMocks.AssertExpectations(t)
 	smock.ExpectationsWereMet()
@@ -135,7 +138,8 @@ func TestGetScan_Success(t *testing.T) {
 		},
 	}
 	scanMocks.On("GetScan", mock.Anything, scanID).Return(expected, nil)
-	actual, err := biz.NewScanUsecase(&scanMocks, nil, log.NewStdLogger(os.Stdout)).GetScan(nil, scanID)
+	actual, err := biz.NewScanUsecase(&scanMocks, nil, log.NewStdLogger(os.Stdout)).
+		GetScan(nil, scanID)
 	if err != nil {
 		t.Errorf("expected err %v, actual err %v", nil, err)
 	}

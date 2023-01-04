@@ -1,4 +1,4 @@
-module backend-GuardRails
+module backend
 
 go 1.17
 

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	v1 "backend-GuardRails/api/repository/v1"
-	"backend-GuardRails/internal/biz"
+	v1 "backend/api/repository/v1"
+	"backend/internal/biz"
 )
 
 type RepositoryService struct {

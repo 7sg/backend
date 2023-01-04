@@ -4,8 +4,8 @@ import (
 	"flag"
 	"os"
 
-	"backend-GuardRails/internal/conf"
-	"backend-GuardRails/internal/data"
+	"backend/internal/conf"
+	"backend/internal/data"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"

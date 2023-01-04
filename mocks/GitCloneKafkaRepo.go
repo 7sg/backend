@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	biz "backend-GuardRails/internal/biz"
+	biz "backend/internal/biz"
 	context "context"
 
 	kafka "github.com/segmentio/kafka-go"

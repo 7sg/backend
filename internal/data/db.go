@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"backend-GuardRails/internal/conf"
+	"backend/internal/conf"
 	"github.com/go-kratos/kratos/v2/log"
 	// postgres driver
 	_ "github.com/lib/pq"

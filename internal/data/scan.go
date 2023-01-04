@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"backend-GuardRails/internal/biz"
+
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -42,7 +43,6 @@ func (s *scanRepo) GetScan(ctx context.Context, scanID uint64) (*biz.Scan, error
 
 		return nil, err
 	}
-	s.log.Infof("findings: %v", findings)
 	err = json.Unmarshal([]byte(findings), &scan.Findings)
 	if err != nil {
 		s.log.Errorf("error while unmarshalling findings: %v", err)

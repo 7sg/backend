@@ -10,7 +10,7 @@ paths:
         post:
             tags:
                 - Repository
-            description: Sends a greeting
+            description: create a repository
             operationId: Repository_CreateRepository
             requestBody:
                 content:
@@ -99,7 +99,6 @@ components:
                     format: uint64
                 message:
                     type: string
-            description: The response message containing the greetings
         repository.v1.GetRepositoryResponse:
             type: object
             properties:
@@ -191,5 +190,5 @@ components:
                     format: date-time
 tags:
     - name: Repository
-      description: The greeting service definition.
+      description: The Repository service definition.
     - name: Scan

@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RepositoryClient interface {
-	// Sends a greeting
+	// create a repository
 	CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error)
 	GetRepository(ctx context.Context, in *GetRepositoryRequest, opts ...grpc.CallOption) (*GetRepositoryResponse, error)
 }
@@ -57,7 +57,7 @@ func (c *repositoryClient) GetRepository(ctx context.Context, in *GetRepositoryR
 // All implementations must embed UnimplementedRepositoryServer
 // for forward compatibility
 type RepositoryServer interface {
-	// Sends a greeting
+	// create a repository
 	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
 	GetRepository(context.Context, *GetRepositoryRequest) (*GetRepositoryResponse, error)
 	mustEmbedUnimplementedRepositoryServer()

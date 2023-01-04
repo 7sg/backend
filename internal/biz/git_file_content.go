@@ -44,7 +44,6 @@ func (f *FileContentUsecase) ConsumeMessage() {
 		if err != nil {
 			continue
 		}
-		f.log.Infof("message consumed: %s", message.Value)
 		fileContent := &FileContent{}
 		err = json.Unmarshal(message.Value, fileContent)
 		if err != nil {
@@ -54,7 +53,6 @@ func (f *FileContentUsecase) ConsumeMessage() {
 		}
 		secretLineNos := f.DetectSecrets(ctx, fileContent)
 		findings := f.BuildFindings(fileContent.Path, secretLineNos)
-		f.log.Infof("secrets %+v, findings: %s", secretLineNos, findings)
 		scanUpdate, err := f.scanRepo.UpdateScanFindings(ctx, fileContent.ScanID, findings)
 		if err != nil {
 			f.log.Errorf("error while updating scan findings: %v", err)

@@ -9,9 +9,9 @@ option java_multiple_files = true;
 option java_package = "dev.kratos.api.repository.v1";
 option java_outer_classname = "RepositoryProtoV1";
 
-// The greeting service definition.
+// The Repository service definition.
 service Repository {
-  // Sends a greeting
+  // create a repository
   rpc CreateRepository (CreateRepositoryRequest) returns (CreateRepositoryResponse) {
     option (google.api.http) = {
       post: "/v1/repository"
@@ -44,7 +44,6 @@ message CreateRepositoryRequest {
   string link = 2;
 }
 
-// The response message containing the greetings
 message CreateRepositoryResponse {
   uint64 id = 1;
   string message = 2;

@@ -1,51 +1,26 @@
-# Kratos Project Template
+## Infrastructure
 
-## Install Kratos
-```
-go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
-```
-## Create a service
-```
-# Create a template project
-kratos new server
+![img.png](img.jpg)
 
-cd server
-# Add a proto template
-kratos proto add api/server/server.proto
-# Generate the proto code
-kratos proto client api/server/server.proto
-# Generate the source code of service by proto file
-kratos proto server api/server/server.proto -t internal/service
+## Solution
+I wanted the final solution to be fault tolrent and scalable, and decided to do all the processing asynchronously 
+and in retryable manner.
+We have an application which exposes all the needed apis [openapi.yaml](openapi.yaml).
+Once the user creates a repository and create a scan against it, the application will create a scan request and publish it to kafka.
+Clone consumer will consume the message, clone the repository, read all regular files content and publish back to kafka on another topic.
+File content consumer will consume the message, parse the content and will look for secrets, and update in db.
+I am storing the how many files we need to scan in db, and once all the files are scanned, I am updating the scan status to success.
 
-go generate ./...
-go build -o ./bin/ ./...
-./bin/server -conf ./configs
-```
-## Generate other auxiliary files by Makefile
-```
-# Download and update dependencies
-make init
-# Generate API files (include: pb.go, http, grpc, validate, swagger) by proto file
-make api
-# Generate all files
-make all
-```
-## Automated Initialization (wire)
-```
-# install wire
-go get github.com/google/wire/cmd/wire
+## How to run
+1. Clone the repo
+2. Run `docker-compose up`
+It will start the application, kafka, zookeeper, postgres.
+3. Config are under [configs/config.yaml](configs/config.yaml), GRPC port is 9000, HTTP port is 8000
+4. Explore the swagger ui at [http://localhost:8000/q/swagger-ui](http://localhost:8000/q/swagger-ui) and try the apis.
 
-# generate wire
-cd cmd/server
-wire
-```
+### To run unit tests
+Run `go test ./...` in root directory
 
-## Docker
-```bash
-# build
-docker build -t <your-docker-image-name> .
-
-# run
-docker run --rm -p 8000:8000 -p 9000:9000 -v </path/to/your/configs>:/data/conf <your-docker-image-name>
-```
-
+## Migration
+I have created a db migration utility, which will run the migrations under [migrations](migrations).
+For that i am using https://github.com/pressly/goose

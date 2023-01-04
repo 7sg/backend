@@ -187,7 +187,6 @@ func (x *CreateRepositoryRequest) GetLink() string {
 	return ""
 }
 
-// The response message containing the greetings
 type CreateRepositoryResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

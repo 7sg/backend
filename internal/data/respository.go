@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"backend-GuardRails/internal/biz"
+
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -12,7 +13,7 @@ type repositoryRepo struct {
 	log  *log.Helper
 }
 
-// NewGreeterRepo .
+// NewRepositoryRepo .
 func NewRepositoryRepo(data *Data, logger log.Logger) biz.RepositoryRepo {
 	return &repositoryRepo{
 		data: data,

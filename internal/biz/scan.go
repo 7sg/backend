@@ -94,7 +94,6 @@ func (s *ScanUsecase) GetScan(ctx context.Context, scanID uint64) (*Scan, error)
 
 		return nil, err
 	}
-	s.log.Infof("scan: %+v", scan)
 
 	return scan, nil
 }

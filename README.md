@@ -1,3 +1,7 @@
+## Problem
+Aim of this project is to make any codebase or repository safe and protect them from attacker.
+At very high level, it can scan any repositor, do the static analayis over it and produce the report.
+
 ## Infrastructure
 
 ![img.png](img.jpg)

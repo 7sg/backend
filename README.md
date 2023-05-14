@@ -30,5 +30,5 @@ I have created a db migration utility, which will run the migrations under [migr
 For that i am using https://github.com/pressly/goose
 
 ## Framework
-I am using Kraots, which is Go framework for building microservices.
+I am using Kraots, which is Go framework for building microservices....
 https://go-kratos.dev/en/
